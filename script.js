@@ -245,6 +245,7 @@ function joinByCode() {
   joinLobby(lobbyId, name);
 
   listenToGameStart(lobbyId);
+  listenToQuestion(lobbyId);
 
   showScreen("joinScreen");
 }
@@ -298,9 +299,10 @@ function listenToQuestion(lobbyId) {
 
       const q = snapshot.val();
 
-      if (!q) return;
+      console.log("QUESTION RECEIVED:", q);
+      console.log("LISTENER ACTIVE:", lobbyId);
 
-      currentQuestion = q;
+      if (!q) return;
 
       document.getElementById("question").innerText = q.q;
       document.getElementById("answer").value = "";
@@ -326,5 +328,6 @@ function autoJoinFromUrl() {
     showScreen("joinScreen");
 
     listenToGameStart(lobbyId);
+    listenToQuestion(lobbyId);
   }
 }

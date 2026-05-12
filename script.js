@@ -284,13 +284,15 @@ function startGame() {
 ======================= */
 
 function listenToGameStart(lobbyId) {
-  db.ref("lobbies/" + lobbyId + "/state").on("value", snapshot => {
-    const data = snapshot.val();
+  db.ref("lobbies/" + lobbyId + "/state/status")
+    .on("value", snapshot => {
 
-    if (data?.status === "started") {
-      showScreen("gameScreen");
-    }
-  });
+      const status = snapshot.val();
+
+      if (status === "started") {
+        showScreen("gameScreen");
+      }
+    });
 }
 
 function listenToQuestion(lobbyId) {

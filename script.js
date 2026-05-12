@@ -102,8 +102,6 @@ function startQuizGame() {
   showScreen("hostLobbyScreen");
 
   listenToPlayers(currentLobbyId);
-
-  listenToGameStart(currentLobbyId); // FÜR HOST
 }
 
 /* =======================
@@ -281,9 +279,14 @@ function listenToPlayers(lobbyId) {
 ======================= */
 
 function startGame() {
+
+  // Spieler informieren
   db.ref("lobbies/" + currentLobbyId + "/state").set({
     status: "started"
   });
+
+  // Host selbst starten
+  showScreen("gameScreen");
 }
 
 function listenToGameStart(lobbyId) {

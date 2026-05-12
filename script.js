@@ -81,6 +81,15 @@ window.onload = () => {
     showScreen("gameSelectScreen");
   });
 
+  document.getElementById("joinLobbyBtn")
+  .addEventListener("click", () => {
+
+    showScreen("joinScreen");
+
+    document.getElementById("lobbyInputWrapper")
+      .style.display = "block";
+  });
+
   document.getElementById("answer").addEventListener("keydown", e => {
     if (e.key === "Enter") checkAnswer();
   });

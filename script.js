@@ -167,6 +167,7 @@ function buildBoard() {
 ======================= */
 
 function openQuestion(q, cell) {
+  console.log("QUESTION CLICKED", q);
   currentQuestion = q;
   currentCell = cell;
 

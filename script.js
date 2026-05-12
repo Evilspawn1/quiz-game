@@ -46,6 +46,7 @@ const questions = {
 let currentQuestion = null;
 let currentCell = null;
 let currentLobbyId = null;
+let currentLobbyLink = "";
 
 /* =======================
    SCREEN SYSTEM
@@ -90,8 +91,8 @@ window.onload = () => {
 function startQuizGame() {
   currentLobbyId = createLobby();
 
-  const link =
-    window.location.origin + "?lobby=" + currentLobbyId;
+  currentLobbyLink =
+  window.location.origin + "?lobby=" + currentLobbyId;
 
   document.getElementById("lobbyCode").innerText =
     currentLobbyId;
@@ -108,12 +109,7 @@ function startQuizGame() {
    LINK COPY 
 ======================= */
 function copyLink() {
-  const link = document.getElementById("joinLink");
-
-  link.select();
-  link.setSelectionRange(0, 99999);
-
-  navigator.clipboard.writeText(link.value);
+  navigator.clipboard.writeText(currentLobbyLink);
 
   alert("Link kopiert!");
 }

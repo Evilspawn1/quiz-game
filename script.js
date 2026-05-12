@@ -89,16 +89,14 @@ window.onload = () => {
 };
 
 function startQuizGame() {
+
   currentLobbyId = createLobby();
 
   currentLobbyLink =
-  window.location.origin + "?lobby=" + currentLobbyId;
+    window.location.origin + "?lobby=" + currentLobbyId;
 
   document.getElementById("lobbyCode").innerText =
     currentLobbyId;
-
-  document.getElementById("joinLink").value =
-    link;
 
   showScreen("hostLobbyScreen");
 

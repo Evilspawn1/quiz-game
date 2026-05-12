@@ -90,14 +90,20 @@ window.onload = () => {
 function startQuizGame() {
   currentLobbyId = createLobby();
 
-  const link = window.location.origin + "?lobby=" + currentLobbyId;
+  const link =
+    window.location.origin + "?lobby=" + currentLobbyId;
 
-  document.getElementById("lobbyCode").innerText = currentLobbyId;
-  document.getElementById("joinLink").value = link;
+  document.getElementById("lobbyCode").innerText =
+    currentLobbyId;
+
+  document.getElementById("joinLink").value =
+    link;
 
   showScreen("hostLobbyScreen");
 
   listenToPlayers(currentLobbyId);
+
+  listenToGameStart(currentLobbyId); // FÜR HOST
 }
 
 /* =======================
@@ -225,8 +231,17 @@ function joinLobby(lobbyId, name) {
 }
 
 function joinByCode() {
-  const lobbyId = document.getElementById("lobbyInput").value;
-  const name = document.getElementById("playerName").value;
+
+  const urlLobby =
+    new URLSearchParams(window.location.search).get("lobby");
+
+  const inputLobby =
+    document.getElementById("lobbyInput").value;
+
+  const lobbyId = urlLobby || inputLobby;
+
+  const name =
+    document.getElementById("playerName").value;
 
   if (!lobbyId || !name) {
     alert("Fehler: Code oder Name fehlt");
@@ -235,11 +250,11 @@ function joinByCode() {
 
   joinLobby(lobbyId, name);
 
-  listenToGameStart(lobbyId); // 👈 WICHTIG
+  listenToGameStart(lobbyId);
 
   alert("Beigetreten!");
 
-  showScreen("joinScreen"); // 👈 NICHT gameScreen
+  showScreen("joinScreen");
 }
 
 /* =======================

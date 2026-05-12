@@ -67,7 +67,8 @@ function showScreen(id) {
     if (el) el.classList.remove("active");
   });
 
-  document.getElementById(id).classList.add("active");
+  const target = document.getElementById(id);
+  if (target) target.classList.add("active");
 }
 
 /* =======================
@@ -81,50 +82,40 @@ window.onload = () => {
     showScreen("gameSelectScreen");
   });
 
-  document.getElementById("joinLobbyBtn")
-  .addEventListener("click", () => {
-
+  document.getElementById("joinLobbyBtn").addEventListener("click", () => {
     showScreen("joinScreen");
 
-    document.getElementById("lobbyInputWrapper")
-      .style.display = "block";
+    const wrapper = document.getElementById("lobbyInputWrapper");
+    if (wrapper) wrapper.style.display = "block";
   });
 
   document.getElementById("answer").addEventListener("keydown", e => {
     if (e.key === "Enter") checkAnswer();
   });
 
-  autoJoinFromUrl(); // von URL Lobby Joinen
-  const lobbyId =
-  new URLSearchParams(window.location.search).get("lobby");
-
-if (!lobbyId) {
-  document.getElementById("lobbyInputWrapper")
-    .style.display = "block";
-}
+  autoJoinFromUrl();
 };
 
 function startQuizGame() {
-
   currentLobbyId = createLobby();
 
   currentLobbyLink =
     window.location.origin + "?lobby=" + currentLobbyId;
 
-  document.getElementById("lobbyCode").innerText =
-    currentLobbyId;
+  document.getElementById("lobbyCode").innerText = currentLobbyId;
 
   showScreen("hostLobbyScreen");
 
   listenToPlayers(currentLobbyId);
+  listenToGameStart(currentLobbyId);
 }
 
 /* =======================
-   LINK COPY 
+   LINK COPY
 ======================= */
+
 function copyLink() {
   navigator.clipboard.writeText(currentLobbyLink);
-
   alert("Link kopiert!");
 }
 
@@ -151,9 +142,7 @@ function buildBoard() {
       if (q) {
         cell.innerText = p;
 
-        cell.onclick = () => {
-          openQuestion(q, cell);
-        };
+        cell.onclick = () => openQuestion(q, cell);
       } else {
         cell.innerText = "-";
         cell.style.opacity = "0.3";
@@ -210,7 +199,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 /* =======================
-   LOBBY SYSTEM
+   LOBBY
 ======================= */
 
 function createLobby() {
@@ -219,37 +208,28 @@ function createLobby() {
   db.ref("lobbies/" + lobbyId).set({
     createdAt: Date.now(),
     players: {},
-    game: "quiz"
+    game: "quiz",
+    state: { status: "lobby" }
   });
 
   return lobbyId;
 }
 
-function testLobby() {
-  const id = createLobby();
-  alert("Lobby erstellt: " + id);
-}
-
 const playerId = Math.random().toString(36).substring(2, 10);
+
 function joinLobby(lobbyId, name) {
   db.ref("lobbies/" + lobbyId + "/players/" + playerId).set({
-  name,
-  score: 0
-});
+    name,
+    score: 0
+  });
 }
 
 function joinByCode() {
-
-  const urlLobby =
-    new URLSearchParams(window.location.search).get("lobby");
-
-  const inputLobby =
-    document.getElementById("lobbyInput").value;
-
+  const urlLobby = new URLSearchParams(window.location.search).get("lobby");
+  const inputLobby = document.getElementById("lobbyInput").value;
   const lobbyId = urlLobby || inputLobby;
 
-  const name =
-    document.getElementById("playerName").value;
+  const name = document.getElementById("playerName").value;
 
   if (!lobbyId || !name) {
     alert("Fehler: Code oder Name fehlt");
@@ -260,13 +240,11 @@ function joinByCode() {
 
   listenToGameStart(lobbyId);
 
-  alert("Beigetreten!");
-
   showScreen("joinScreen");
 }
 
 /* =======================
-   LIVE LOBBY (HOST)
+   HOST LOBBY
 ======================= */
 
 function listenToPlayers(lobbyId) {
@@ -276,48 +254,53 @@ function listenToPlayers(lobbyId) {
     const list = document.getElementById("playerList");
     list.innerHTML = "";
 
-    Object.keys(data).forEach(key => {
+    Object.values(data).forEach(p => {
       const div = document.createElement("div");
-      div.innerText = data[key].name;
+      div.innerText = p.name;
       list.appendChild(div);
     });
   });
 }
 
 /* =======================
-   START GAME (HOST)
+   GAME START (FIXED)
 ======================= */
 
 function startGame() {
-
-  // Spieler informieren
   db.ref("lobbies/" + currentLobbyId + "/state").set({
     status: "started"
   });
-
-  // Host selbst starten
-  showScreen("gameScreen");
 }
+
+/* =======================
+   LISTENER
+======================= */
 
 function listenToGameStart(lobbyId) {
   db.ref("lobbies/" + lobbyId + "/state").on("value", snapshot => {
     const data = snapshot.val();
 
-    if (data && data.status === "started") {
+    if (data?.status === "started") {
       showScreen("gameScreen");
     }
   });
 }
 
+/* =======================
+   URL JOIN
+======================= */
+
 function autoJoinFromUrl() {
   const lobbyId = new URLSearchParams(window.location.search).get("lobby");
 
   if (lobbyId) {
-    currentLobbyId = lobbyId; // CURRENT LOBBY ID LEER
-    document.getElementById("lobbyInputWrapper")
-    .style.display = "none"; 
+    currentLobbyId = lobbyId;
+
+    const wrapper = document.getElementById("lobbyInputWrapper");
+    if (wrapper) wrapper.style.display = "none";
 
     showScreen("joinScreen");
+
     listenToGameStart(lobbyId);
   }
 }

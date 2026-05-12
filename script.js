@@ -45,6 +45,7 @@ const questions = {
 
 let currentQuestion = null;
 let currentCell = null;
+let currentLobbyId = null;
 
 /* =======================
    SCREEN SYSTEM
@@ -56,7 +57,8 @@ function showScreen(id) {
     "gameSelectScreen",
     "gameScreen",
     "questionScreen",
-    "joinScreen"
+    "joinScreen",
+    "hostLobbyScreen"
   ];
 
   screens.forEach(s => {
@@ -92,7 +94,17 @@ window.onload = () => {
 };
 
 function startQuizGame() {
-  showScreen("gameScreen");
+  currentLobbyId = createLobby();
+
+  const link = window.location.origin + "?lobby=" + currentLobbyId;
+
+  alert("Lobby erstellt!\n\nLink: " + link);
+
+  document.getElementById("lobbyCode").innerText = currentLobbyId;
+
+  showScreen("hostLobbyScreen");
+
+  listenToPlayers(currentLobbyId);
 }
 
 /* =======================
@@ -217,5 +229,33 @@ function joinLobbyFromUrl() {
 
   alert("Beigetreten!");
 
+  showScreen("gameScreen");
+}
+
+/* =======================
+   LIVE LOBBY (HOST)
+======================= */
+
+function listenToPlayers(lobbyId) {
+  db.ref("lobbies/" + lobbyId + "/players").on("value", snapshot => {
+    const data = snapshot.val() || {};
+
+    const list = document.getElementById("playerList");
+    list.innerHTML = "";
+
+    Object.keys(data).forEach(key => {
+      const div = document.createElement("div");
+      div.innerText = data[key].name;
+      list.appendChild(div);
+    });
+  });
+}
+
+/* =======================
+   START GAME (HOST)
+======================= */
+
+function startGame() {
+  alert("Spiel startet!");
   showScreen("gameScreen");
 }

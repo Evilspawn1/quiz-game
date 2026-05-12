@@ -64,10 +64,10 @@ function showScreen(id) {
 
   screens.forEach(s => {
     const el = document.getElementById(s);
-    if (el) el.classList.add("hidden");
+    if (el) el.classList.remove("active");
   });
 
-  document.getElementById(id).classList.remove("hidden");
+  document.getElementById(id).classList.add("active");
 }
 
 /* =======================

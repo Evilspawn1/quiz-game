@@ -8,7 +8,7 @@
 <body>
 
 <!-- START SCREEN -->
-<div id="startScreen">
+<div id="startScreen" class="screen active">
   <h1>🎮 Game Hub</h1>
   <button id="startBtn">Lobby erstellen</button>
 
@@ -16,7 +16,7 @@
 </div>
 
 <!-- GAME SELECTION -->
-<div id="gameSelectScreen" class="hidden">
+<div id="gameSelectScreen" class="screen">>
   <h1>Spiel auswählen</h1>
 
   <div id="gameList">
@@ -31,13 +31,13 @@
 </div>
 
 <!-- QUIZ GAME -->
-<div id="gameScreen" class="hidden">
+<div id="gameScreen" class="screen">>
   <h1>🎮 Quiz Game</h1>
   <div id="board"></div>
 </div>
 
 <!-- QUESTION SCREEN -->
-<div id="questionScreen" class="hidden">
+<div id="questionScreen" class="screen">>
   <h1 id="question"></h1>
 
   <input id="answer" placeholder="Antwort eingeben">
@@ -45,7 +45,7 @@
 </div>
 
 <!-- JOIN SCREEN -->
-<div id="joinScreen" class="hidden">
+<div id="joinScreen" class="screen">
   <h1>Lobby beitreten</h1>
 
   <input id="playerName" placeholder="Dein Name">
@@ -58,7 +58,7 @@
 </div>
 
 <!-- Lobbyscreen -->
-<div id="hostLobbyScreen" class="hidden">
+<div id="hostLobbyScreen" class="screen">
   <h1>🏠 Lobby</h1>
 
   <h2>Code: <span id="lobbyCode"></span></h2>

@@ -96,6 +96,11 @@ window.onload = () => {
   autoJoinFromUrl();
 };
 
+/* =======================
+   Start Quiz Game
+======================= */
+
+
 function startQuizGame() {
   currentLobbyId = createLobby();
 
@@ -108,6 +113,7 @@ function startQuizGame() {
 
   listenToPlayers(currentLobbyId);
   listenToGameStart(currentLobbyId);
+  listenToQuestion(currentLobbyId);
 }
 
 /* =======================
@@ -164,10 +170,9 @@ function openQuestion(q, cell) {
   currentQuestion = q;
   currentCell = cell;
 
-  document.getElementById("question").innerText = q.q;
-  document.getElementById("answer").value = "";
-
-  showScreen("questionScreen");
+  db.ref("lobbies/" + currentLobbyId + "/state").update({
+    currentQuestion: q
+  });
 }
 
 function checkAnswer() {
@@ -285,6 +290,24 @@ function listenToGameStart(lobbyId) {
     }
   });
 }
+
+function listenToQuestion(lobbyId) {
+  db.ref("lobbies/" + lobbyId + "/state/currentQuestion")
+    .on("value", snapshot => {
+
+      const q = snapshot.val();
+
+      if (!q) return;
+
+      currentQuestion = q;
+
+      document.getElementById("question").innerText = q.q;
+      document.getElementById("answer").value = "";
+
+      showScreen("questionScreen");
+    });
+}
+
 
 /* =======================
    URL JOIN

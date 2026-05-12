@@ -274,7 +274,7 @@ function listenToPlayers(lobbyId) {
 ======================= */
 
 function startGame() {
-  db.ref("lobbies/" + currentLobbyId + "/state").set({
+  db.ref("lobbies/" + currentLobbyId + "/state").update({
     status: "started"
   });
 }

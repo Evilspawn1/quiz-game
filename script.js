@@ -300,9 +300,10 @@ function listenToQuestion(lobbyId) {
       const q = snapshot.val();
 
       console.log("QUESTION RECEIVED:", q);
-      console.log("LISTENER ACTIVE:", lobbyId);
 
       if (!q) return;
+
+      currentQuestion = q;
 
       document.getElementById("question").innerText = q.q;
       document.getElementById("answer").value = "";

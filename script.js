@@ -235,9 +235,11 @@ function joinByCode() {
 
   joinLobby(lobbyId, name);
 
+  listenToGameStart(lobbyId); // 👈 WICHTIG
+
   alert("Beigetreten!");
 
-  showScreen("gameScreen");
+  showScreen("joinScreen"); // 👈 NICHT gameScreen
 }
 
 /* =======================
@@ -264,14 +266,28 @@ function listenToPlayers(lobbyId) {
 ======================= */
 
 function startGame() {
-  alert("Spiel startet!");
-  showScreen("gameScreen");
+  db.ref("lobbies/" + currentLobbyId + "/state").set({
+    status: "started"
+  });
+}
+
+function listenToGameStart(lobbyId) {
+  db.ref("lobbies/" + lobbyId + "/state").on("value", snapshot => {
+    const data = snapshot.val();
+
+    if (data && data.status === "started") {
+      showScreen("gameScreen");
+    }
+  });
 }
 
 function autoJoinFromUrl() {
   const lobbyId = new URLSearchParams(window.location.search).get("lobby");
 
   if (lobbyId) {
+    currentLobbyId = lobbyId; // 👈 WICHTIG
+
     showScreen("joinScreen");
+    listenToGameStart(lobbyId);
   }
 }

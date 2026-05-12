@@ -1,0 +1,122 @@
+body {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  text-align: center;
+  background: #111;
+  color: white;
+  margin: 0;
+  /* display: flex; */
+  /* align-items: center; */
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 120px 10px;
+  margin: 60px auto;
+  max-width: 1200px;
+  
+}
+
+.hidden {
+  display: none;
+}
+
+h1 {
+  margin-top: 20px;
+}
+
+.cell {
+  background: #1e90ff;
+  height: 100px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  outline: 1px solid rgb(255, 255, 255);
+  transition: 0.2s;
+}
+
+.cell.used {
+  background: #444;
+  color: #999;
+  cursor: default;
+  pointer-events: none;
+}
+
+.cell:not(.used):hover {
+  transform: scale(1.03);
+  background: #3ea0ff;
+}
+
+#questionScreen {
+  margin-top: 120px;
+}
+
+input {
+  padding: 10px;
+  font-size: 16px;
+}
+
+button {
+  padding: 10px 15px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+#startScreen,
+#gameSelectScreen {
+  margin-top: 150px;
+}
+
+#startBtn {
+  padding: 15px 30px;
+  font-size: 20px;
+  border: none;
+  border-radius: 12px;
+  width: 200px;
+  background: #ff1e1e;
+  color: white;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  font-style: italic;
+  
+}
+
+#gameList {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 60px;
+}
+
+.gameCard {
+  width: 220px;
+  height: 120px;
+
+  background: #004181;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 22px;
+  font-weight: bold;
+
+  transition: 0.2s;
+}
+
+.gameCard:hover {
+  transform: scale(1.05);
+}
+
+.gameCard.disabled {
+  background: #444;
+  cursor: default;
+}

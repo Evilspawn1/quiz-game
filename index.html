@@ -10,7 +10,6 @@
 <!-- START SCREEN -->
 <div id="startScreen">
   <h1>🎮 Game Hub</h1>
-
   <button id="startBtn">Start</button>
 </div>
 
@@ -26,21 +25,12 @@
     <div class="gameCard disabled">
       Weitere Spiele bald...
     </div>
-
-    <div id="joinScreen" class="hidden">
-    <h1>Lobby beitreten</h1>
-
-    <input id="playerName" placeholder="Dein Name">
-    <button onclick="joinLobbyFromUrl()">Beitreten</button>
-    </div>
-
   </div>
 </div>
 
 <!-- QUIZ GAME -->
 <div id="gameScreen" class="hidden">
   <h1>🎮 Quiz Game</h1>
-
   <div id="board"></div>
 </div>
 
@@ -52,12 +42,19 @@
   <button onclick="checkAnswer()">Antwort prüfen</button>
 </div>
 
+<!-- JOIN SCREEN -->
+<div id="joinScreen" class="hidden">
+  <h1>Lobby beitreten</h1>
 
+  <input id="playerName" placeholder="Dein Name">
+  <button onclick="joinLobbyFromUrl()">Beitreten</button>
+</div>
 
-<button onclick="testLobby()">Lobby erstellen (Test)</button>
-
+<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
 <script src="script.js"></script>
+
 </body>
 </html>

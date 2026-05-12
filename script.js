@@ -1,55 +1,104 @@
-const categories = [
-  "Sport",
-  "Anime",
-  "Geographie",
-  "Film",
-  "Gaming"
-];
+/* =======================
+   QUIZ GAME DATA
+======================= */
 
+const categories = ["Sport", "Anime", "Geographie", "Film", "Gaming"];
 const points = [100, 200, 300, 400, 500];
 
 const questions = {
   Sport: [
     { q: "Wie viele Spieler hat ein Fußballteam?", a: "11", points: 100 },
-    { q: "Welcher Sport nutzt einen Ring?", a: "Basketball", points: 200 },
-    { q: "Test 300", a: "x", points: 300 },
-    { q: "Test 400", a: "x", points: 400 },
-    { q: "Test 500", a: "x", points: 500 }
+    { q: "Wie viele Spieler hat ein Fußballteam?", a: "11", points: 200 },
+    { q: "Wie viele Spieler hat ein Fußballteam?", a: "11", points: 300 },
+    { q: "Wie viele Spieler hat ein Fußballteam?", a: "11", points: 400 },
+    { q: "Wie viele Spieler hat ein Fußballteam?", a: "11", points: 500 }
   ],
   Anime: [
     { q: "Wer ist Naruto?", a: "Ninja", points: 100 },
     { q: "Serie mit Goku?", a: "Dragon Ball", points: 200 },
-    { q: "Test 300", a: "x", points: 300 },
-    { q: "Test 400", a: "x", points: 400 },
-    { q: "Test 500", a: "x", points: 500 }
+    { q: "Serie mit Goku?", a: "Dragon Ball", points: 300 },
+    { q: "Serie mit Goku?", a: "Dragon Ball", points: 400 },
+    { q: "Serie mit Goku?", a: "Dragon Ball", points: 500 }
   ],
   Geographie: [
     { q: "Hauptstadt von Deutschland?", a: "Berlin", points: 100 },
-    { q: "Test 200", a: "x", points: 200 },
-    { q: "Test 300", a: "x", points: 300 },
-    { q: "Test 400", a: "x", points: 400 },
-    { q: "Test 500", a: "x", points: 500 }
+    { q: "Hauptstadt von Deutschland?", a: "Berlin", points: 200 },
+    { q: "Hauptstadt von Deutschland?", a: "Berlin", points: 300 },
+    { q: "Hauptstadt von Deutschland?", a: "Berlin", points: 400 },
+    { q: "Hauptstadt von Deutschland?", a: "Berlin", points: 500 }
   ],
   Film: [
     { q: "Wer ist Batman?", a: "Bruce Wayne", points: 100 },
-    { q: "Test 200", a: "x", points: 200 },
-    { q: "Test 300", a: "x", points: 300 },
-    { q: "Test 400", a: "x", points: 400 },
-    { q: "Test 500", a: "x", points: 500 }
+    { q: "Wer ist Batman?", a: "Bruce Wayne", points: 200 },
+    { q: "Wer ist Batman?", a: "Bruce Wayne", points: 300 },
+    { q: "Wer ist Batman?", a: "Bruce Wayne", points: 400 },
+    { q: "Wer ist Batman?", a: "Bruce Wayne", points: 500 }
   ],
   Gaming: [
     { q: "Was ist Minecraft?", a: "Spiel", points: 100 },
-    { q: "Test 200", a: "x", points: 200 },
-    { q: "Test 300", a: "x", points: 300 },
-    { q: "Test 400", a: "x", points: 400 },
-    { q: "Test 500", a: "x", points: 500 }
+    { q: "Was ist Minecraft?", a: "Spiel", points: 200 },
+    { q: "Was ist Minecraft?", a: "Spiel", points: 300 },
+    { q: "Was ist Minecraft?", a: "Spiel", points: 400 },
+    { q: "Was ist Minecraft?", a: "Spiel", points: 500 }
   ]
 };
 
 let currentQuestion = null;
 let currentCell = null;
 
-// 🔥 BOARD BAUEN
+/* =======================
+   SCREEN SYSTEM
+======================= */
+
+function showScreen(id) {
+  const screens = [
+    "startScreen",
+    "gameSelectScreen",
+    "gameScreen",
+    "questionScreen",
+    "joinScreen"
+  ];
+
+  screens.forEach(s => {
+    const el = document.getElementById(s);
+    if (el) el.classList.add("hidden");
+  });
+
+  document.getElementById(id).classList.remove("hidden");
+}
+
+/* =======================
+   START FLOW
+======================= */
+
+window.onload = () => {
+  buildBoard();
+
+  document.getElementById("startBtn").addEventListener("click", () => {
+    showScreen("gameSelectScreen");
+  });
+
+  document.getElementById("answer").addEventListener("keydown", e => {
+    if (e.key === "Enter") checkAnswer();
+  });
+
+  const lobbyId = new URLSearchParams(window.location.search).get("lobby");
+
+  if (lobbyId) {
+    showScreen("joinScreen");
+  } else {
+    showScreen("startScreen");
+  }
+};
+
+function startQuizGame() {
+  showScreen("gameScreen");
+}
+
+/* =======================
+   BOARD
+======================= */
+
 function buildBoard() {
   const board = document.getElementById("board");
 
@@ -61,7 +110,7 @@ function buildBoard() {
     col.appendChild(title);
 
     points.forEach(p => {
-      const q = questions[cat].find(x => x.points === p);
+      const q = questions[cat]?.find(x => x.points === p);
 
       const cell = document.createElement("div");
       cell.classList.add("cell");
@@ -85,7 +134,10 @@ function buildBoard() {
   });
 }
 
-// 🔥 FRAGE ÖFFNEN
+/* =======================
+   GAME LOGIC
+======================= */
+
 function openQuestion(q, cell) {
   currentQuestion = q;
   currentCell = cell;
@@ -93,11 +145,9 @@ function openQuestion(q, cell) {
   document.getElementById("question").innerText = q.q;
   document.getElementById("answer").value = "";
 
-  document.getElementById("gameScreen").classList.add("hidden");
-  document.getElementById("questionScreen").classList.remove("hidden");
+  showScreen("questionScreen");
 }
 
-// 🔥 ANTWORT PRÜFEN
 function checkAnswer() {
   const ans = document.getElementById("answer").value;
 
@@ -109,37 +159,13 @@ function checkAnswer() {
 
   currentCell.classList.add("used");
 
-  document.getElementById("questionScreen").classList.add("hidden");
-  document.getElementById("gameScreen").classList.remove("hidden");
+  showScreen("gameScreen");
 }
 
-// 🔥 START
-window.onload = () => {
-  buildBoard();
+/* =======================
+   FIREBASE
+======================= */
 
-  document.getElementById("startBtn").addEventListener("click", showGameSelection);
-
-  document.getElementById("answer").addEventListener("keydown", e => {
-    if (e.key === "Enter") {
-      checkAnswer();
-    }
-  });
-};
-
-function showGameSelection() {
-  document.getElementById("startScreen").classList.add("hidden");
-
-  document.getElementById("gameSelectScreen").classList.remove("hidden");
-}
-
-function startQuizGame() {
-  document.getElementById("gameSelectScreen").classList.add("hidden");
-
-  document.getElementById("gameScreen").classList.remove("hidden");
-}
-
-
-/*Firebase Zeug für Multiplayer*/
 const firebaseConfig = {
   apiKey: "AIzaSyAka-trKtZtJTndiC1Xns4M-0UBYoxg3ns",
   authDomain: "anime-quiz-op-talk.firebaseapp.com",
@@ -150,8 +176,10 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+/* =======================
+   LOBBY SYSTEM
+======================= */
 
-/*Lobby erstellen*/
 function createLobby() {
   const lobbyId = Math.random().toString(36).substring(2, 8).toUpperCase();
 
@@ -163,28 +191,31 @@ function createLobby() {
 
   return lobbyId;
 }
-// Test Lobby
+
 function testLobby() {
   const id = createLobby();
   alert("Lobby erstellt: " + id);
 }
-//Lobby joinen
+
 function joinLobby(lobbyId, name) {
   db.ref("lobbies/" + lobbyId + "/players/" + name).set({
-    name: name,
+    name,
     score: 0
   });
 }
 
-// Lobby aus 'URL lesen
 function joinLobbyFromUrl() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const lobbyId = urlParams.get("lobby");
+  const lobbyId = new URLSearchParams(window.location.search).get("lobby");
   const name = document.getElementById("playerName").value;
 
-  if (!lobbyId || !name) return alert("Fehler");
+  if (!lobbyId || !name) {
+    alert("Fehler: Lobby oder Name fehlt");
+    return;
+  }
 
   joinLobby(lobbyId, name);
 
   alert("Beigetreten!");
+
+  showScreen("gameScreen");
 }

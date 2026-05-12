@@ -47,16 +47,23 @@
   <h1>Lobby beitreten</h1>
 
   <input id="playerName" placeholder="Dein Name">
-  <button onclick="joinLobbyFromUrl()">Beitreten</button>
+
+  <input id="lobbyInput" placeholder="Lobby Code">
+
+  <button onclick="joinByCode()">Beitreten</button>
 </div>
 
 <!-- Lobbyscreen -->
 <div id="hostLobbyScreen" class="hidden">
   <h1>🏠 Lobby</h1>
 
-  <h2 id="lobbyCode"></h2>
+  <h2>Code: <span id="lobbyCode"></span></h2>
 
-  <p>Spieler:</p>
+  <input id="joinLink" readonly style="width: 80%; padding: 10px;" />
+
+  <button onclick="copyLink()">📋 Link kopieren</button>
+
+  <h3>Spieler:</h3>
   <div id="playerList"></div>
 
   <button onclick="startGame()">🚀 Spiel starten</button>

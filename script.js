@@ -84,13 +84,7 @@ window.onload = () => {
     if (e.key === "Enter") checkAnswer();
   });
 
-  const lobbyId = new URLSearchParams(window.location.search).get("lobby");
-
-  if (lobbyId) {
-    showScreen("joinScreen");
-  } else {
-    showScreen("startScreen");
-  }
+  autoJoinFromUrl(); // 👈 HIER
 };
 
 function startQuizGame() {
@@ -98,13 +92,26 @@ function startQuizGame() {
 
   const link = window.location.origin + "?lobby=" + currentLobbyId;
 
-  alert("Lobby erstellt!\n\nLink: " + link);
-
   document.getElementById("lobbyCode").innerText = currentLobbyId;
+  document.getElementById("joinLink").value = link;
 
   showScreen("hostLobbyScreen");
 
   listenToPlayers(currentLobbyId);
+}
+
+/* =======================
+   LINK COPY 
+======================= */
+function copyLink() {
+  const link = document.getElementById("joinLink");
+
+  link.select();
+  link.setSelectionRange(0, 99999);
+
+  navigator.clipboard.writeText(link.value);
+
+  alert("Link kopiert!");
 }
 
 /* =======================
@@ -209,19 +216,20 @@ function testLobby() {
   alert("Lobby erstellt: " + id);
 }
 
+const playerId = Math.random().toString(36).substring(2, 10);
 function joinLobby(lobbyId, name) {
-  db.ref("lobbies/" + lobbyId + "/players/" + name).set({
-    name,
-    score: 0
-  });
+  db.ref("lobbies/" + lobbyId + "/players/" + playerId).set({
+  name,
+  score: 0
+});
 }
 
-function joinLobbyFromUrl() {
-  const lobbyId = new URLSearchParams(window.location.search).get("lobby");
+function joinByCode() {
+  const lobbyId = document.getElementById("lobbyInput").value;
   const name = document.getElementById("playerName").value;
 
   if (!lobbyId || !name) {
-    alert("Fehler: Lobby oder Name fehlt");
+    alert("Fehler: Code oder Name fehlt");
     return;
   }
 
@@ -258,4 +266,12 @@ function listenToPlayers(lobbyId) {
 function startGame() {
   alert("Spiel startet!");
   showScreen("gameScreen");
+}
+
+function autoJoinFromUrl() {
+  const lobbyId = new URLSearchParams(window.location.search).get("lobby");
+
+  if (lobbyId) {
+    showScreen("joinScreen");
+  }
 }

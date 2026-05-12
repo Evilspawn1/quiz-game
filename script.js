@@ -85,7 +85,14 @@ window.onload = () => {
     if (e.key === "Enter") checkAnswer();
   });
 
-  autoJoinFromUrl(); // 👈 HIER
+  autoJoinFromUrl(); // von URL Lobby Joinen
+  const lobbyId =
+  new URLSearchParams(window.location.search).get("lobby");
+
+if (!lobbyId) {
+  document.getElementById("lobbyInputWrapper")
+    .style.display = "block";
+}
 };
 
 function startQuizGame() {
@@ -297,7 +304,9 @@ function autoJoinFromUrl() {
   const lobbyId = new URLSearchParams(window.location.search).get("lobby");
 
   if (lobbyId) {
-    currentLobbyId = lobbyId; // 👈 WICHTIG
+    currentLobbyId = lobbyId; // CURRENT LOBBY ID LEER
+    document.getElementById("lobbyInputWrapper")
+    .style.display = "none"; 
 
     showScreen("joinScreen");
     listenToGameStart(lobbyId);
